@@ -14,9 +14,12 @@ import {
   updateUserFactory,
   createTransactionFactory,
 } from '@transaction-service/main/factories/usecases';
+import { redisProvider } from '@transaction-service/infra/redis';
 
 @Module({
   providers: [
+    redisProvider,
+
     //repositories
     UserRepository,
     TransactionRepository,
@@ -33,6 +36,8 @@ import {
     createTransactionFactory,
   ],
   exports: [
+    redisProvider,
+
     createUserFactory,
     updateUserFactory,
     deleteUserFactory,

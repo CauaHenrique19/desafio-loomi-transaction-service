@@ -3,6 +3,7 @@ import {
   Controller,
   Post,
   Res,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import {
 import { BuildCreateTransactionController } from '@transaction-service/main/factories/controllers';
 import { controllerAdapter } from '@transaction-service/main/adapters/controller.adpter';
 import { CreateTransactionDTO } from '@transaction-service/main/controllers/transaction/dto';
+import { IdempotencyInterceptor } from '@transaction-service/main/interceptors';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -66,12 +68,16 @@ export class TransactionController {
       },
     },
   })
+  @ApiBadRequestResponse({
+    description: "Header 'idempotency-key' is required for this request.",
+  })
   @ApiResponse({
     status: 409,
     description: 'Requisição duplicada com a mesma idempotency-key',
   })
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true }))
+  @UseInterceptors(IdempotencyInterceptor)
   async create(
     @Body() body: CreateTransactionDTO,
     @Res() response: Response,
