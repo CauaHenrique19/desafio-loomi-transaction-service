@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User } from '@transaction-service/infra/orm/entities';
+import { User, Transaction } from '@transaction-service/infra/orm/entities';
 import { CONFIG } from 'src/config';
 
 export const AppDataSource = new DataSource({
@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   database: CONFIG.DATABASE_NAME,
   synchronize: true,
   logging: false,
-  entities: [User],
+  entities: [User, Transaction],
   subscribers: [],
   migrations: [],
   ssl: CONFIG.NODE_ENV === 'development' ? false : true,
