@@ -22,6 +22,11 @@ export class RedisAdapter implements CacheAdapter {
     value: string,
     properties?: SetProperties,
   ): Promise<void> {
-    await this.client.set(key, value, 'EX', properties?.ttl || 0);
+    if (properties?.ttl) {
+      await this.client.set(key, value, 'EX', properties.ttl);
+      return;
+    }
+
+    await this.client.set(key, value);
   }
 }

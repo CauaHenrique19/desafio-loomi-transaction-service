@@ -20,8 +20,6 @@ export class CreateTransactionController implements Controller {
       const createdTransaction = await this.createTransaction.create(request);
       return createdSuccess(createdTransaction);
     } catch (error) {
-      console.log(error);
-
       if (error instanceof UserNotFoundError) {
         return badRequest(error);
       }

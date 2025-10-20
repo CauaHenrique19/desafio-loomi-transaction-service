@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   Res,
   UseInterceptors,
@@ -15,11 +17,15 @@ import {
   ApiHeader,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
-import { BuildCreateTransactionController } from '@transaction-service/main/factories/controllers';
+import {
+  BuildCreateTransactionController,
+  BuildFindTransactionByIdController,
+} from '@transaction-service/main/factories/controllers';
 import { controllerAdapter } from '@transaction-service/main/adapters/controller.adpter';
 import { CreateTransactionDTO } from '@transaction-service/main/controllers/transaction/dto';
 import { IdempotencyInterceptor } from '@transaction-service/main/interceptors';
@@ -29,6 +35,7 @@ import { IdempotencyInterceptor } from '@transaction-service/main/interceptors';
 export class TransactionController {
   constructor(
     private readonly buildCreateTransactionController: BuildCreateTransactionController,
+    private readonly buildFindTransactionByIdController: BuildFindTransactionByIdController,
   ) {}
 
   @ApiHeader({
@@ -85,6 +92,39 @@ export class TransactionController {
     const result = await controllerAdapter(
       this.buildCreateTransactionController.build(),
       body,
+    );
+    response.status(result.statusCode).json(result);
+  }
+
+  @ApiInternalServerErrorResponse({
+    description: 'Erro inesperado na execução',
+  })
+  @ApiNotFoundResponse({
+    description: 'Nenhuma transação encontrada',
+  })
+  @ApiOkResponse({
+    description: 'Transação encontrada com id',
+    example: {
+      statusCode: 200,
+      body: {
+        id: 'string',
+        senderClientId: 'string',
+        receiverClientId: 'string',
+        amout: 'number',
+        description: 'string',
+        deletedAt: 'Date',
+      },
+    },
+  })
+  @Get('/:id')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async findById(
+    @Param('id') id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const result = await controllerAdapter(
+      this.buildFindTransactionByIdController.build(),
+      { id },
     );
     response.status(result.statusCode).json(result);
   }
