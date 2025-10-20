@@ -19,7 +19,7 @@ export class FindTransactionById implements FindTransactionByIdUseCase {
       return JSON.parse(transactionInCache);
     }
 
-    const transaction = await this.findTransactionByIdRepository.find({
+    const transaction = await this.findTransactionByIdRepository.findById({
       id: parameters.id,
     });
 

@@ -24,6 +24,7 @@ import {
 
 import {
   BuildCreateTransactionController,
+  BuildFindTransactionByClientIdController,
   BuildFindTransactionByIdController,
 } from '@transaction-service/main/factories/controllers';
 import { controllerAdapter } from '@transaction-service/main/adapters/controller.adpter';
@@ -36,6 +37,7 @@ export class TransactionController {
   constructor(
     private readonly buildCreateTransactionController: BuildCreateTransactionController,
     private readonly buildFindTransactionByIdController: BuildFindTransactionByIdController,
+    private readonly buildFindTransactionByClientIdController: BuildFindTransactionByClientIdController,
   ) {}
 
   @ApiHeader({
@@ -125,6 +127,42 @@ export class TransactionController {
     const result = await controllerAdapter(
       this.buildFindTransactionByIdController.build(),
       { id },
+    );
+    response.status(result.statusCode).json(result);
+  }
+
+  @ApiInternalServerErrorResponse({
+    description: 'Erro inesperado na execução',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuário não encontrado',
+  })
+  @ApiOkResponse({
+    description: 'Transações encontradas',
+    isArray: true,
+    example: {
+      statusCode: 200,
+      body: [
+        {
+          id: 'string',
+          senderClientId: 'string',
+          receiverClientId: 'string',
+          amout: 'number',
+          description: 'string',
+          deletedAt: 'Date',
+        },
+      ],
+    },
+  })
+  @Get('user/:clientId')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async findByClientId(
+    @Param('clientId') clientId: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const result = await controllerAdapter(
+      this.buildFindTransactionByClientIdController.build(),
+      { clientId },
     );
     response.status(result.statusCode).json(result);
   }
