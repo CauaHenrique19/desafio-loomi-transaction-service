@@ -14,6 +14,7 @@ import {
   updateUserFactory,
   createTransactionFactory,
   findTransactionByIdFactory,
+  findTransactionByClientIdFactory,
 } from '@transaction-service/main/factories/usecases';
 import { redisProvider } from '@transaction-service/infra/redis';
 
@@ -36,6 +37,7 @@ import { redisProvider } from '@transaction-service/infra/redis';
 
     createTransactionFactory,
     findTransactionByIdFactory,
+    findTransactionByClientIdFactory,
   ],
   exports: [
     redisProvider,
@@ -45,6 +47,7 @@ import { redisProvider } from '@transaction-service/infra/redis';
     deleteUserFactory,
     createTransactionFactory,
     findTransactionByIdFactory,
+    findTransactionByClientIdFactory,
   ],
 })
 export class FactoryModule {}

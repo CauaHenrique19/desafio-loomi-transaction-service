@@ -1,7 +1,7 @@
 import { TransactionModel } from '@transaction-service/domain/models';
 
 export interface FindTransactionByIdRepository {
-  find(
+  findById(
     parameters: FindTransactionByIdRepository.Parameters,
   ): Promise<FindTransactionByIdRepository.Result>;
 }
