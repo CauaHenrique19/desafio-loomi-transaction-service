@@ -8,7 +8,7 @@ export interface FindUsersRepository {
 
 export namespace FindUsersRepository {
   export type Parameters = {
-    id?: string;
+    clientId?: string | string[];
   };
   export type Result = UserModel[];
 }

@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { EntityTarget, FindOptionsWhere, Repository } from 'typeorm';
+import { EntityTarget, FindOptionsWhere, In, Repository } from 'typeorm';
 
 import {
   CreateUserRepository,
@@ -33,8 +33,10 @@ export class UserRepository
   ): Promise<FindUsersRepository.Result> {
     const where: FindOptionsWhere<User> = {};
 
-    if (parameters?.id) {
-      where.id = parameters.id;
+    if (Array.isArray(parameters?.clientId) && parameters.clientId.length) {
+      where.clientId = In(parameters.clientId);
+    } else if (parameters?.clientId) {
+      where.clientId = parameters.clientId as string;
     }
 
     return this.userRepository.find({

@@ -1,0 +1,85 @@
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { Response } from 'express';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiHeader,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
+import { BuildCreateTransactionController } from '@transaction-service/main/factories/controllers';
+import { controllerAdapter } from '@transaction-service/main/adapters/controller.adpter';
+import { CreateTransactionDTO } from '@transaction-service/main/controllers/transaction/dto';
+
+@ApiTags('Transactions')
+@Controller('transactions')
+export class TransactionController {
+  constructor(
+    private readonly buildCreateTransactionController: BuildCreateTransactionController,
+  ) {}
+
+  @ApiHeader({
+    name: 'idempotency-key',
+    description:
+      'Chave única usada para garantir que requisições duplicadas não gerem múltiplas operações.',
+    required: true,
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @ApiBody({
+    schema: {
+      example: {
+        senderClientId: 'uuid',
+        receiverClientId: 'uuid',
+        amout: 10,
+        description: 'transferencia blablabla',
+      },
+    },
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Erro inesperado na execução',
+  })
+  @ApiNotFoundResponse({
+    description: 'Usuário inexistente na base',
+  })
+  @ApiCreatedResponse({
+    description: 'Transferencia realizada',
+    example: {
+      statusCode: 201,
+      body: {
+        id: 'string',
+        senderClientId: 'string',
+        receiverClientId: 'string',
+        amout: 'number',
+        description: 'string',
+        createdAt: 'Date',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Requisição duplicada com a mesma idempotency-key',
+  })
+  @Post()
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async create(
+    @Body() body: CreateTransactionDTO,
+    @Res() response: Response,
+  ): Promise<void> {
+    const result = await controllerAdapter(
+      this.buildCreateTransactionController.build(),
+      body,
+    );
+    response.status(result.statusCode).json(result);
+  }
+}
