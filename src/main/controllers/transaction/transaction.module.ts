@@ -12,9 +12,19 @@ import { TransactionController } from './transaction.controller';
   imports: [FactoryModule],
   controllers: [TransactionController],
   providers: [
-    BuildCreateTransactionController,
-    BuildFindTransactionByIdController,
-    BuildFindTransactionByClientIdController,
+    {
+      provide: BuildCreateTransactionController.name,
+      useClass: BuildCreateTransactionController,
+    },
+    {
+      provide: BuildFindTransactionByIdController.name,
+      useClass: BuildFindTransactionByIdController,
+    },
+
+    {
+      provide: BuildFindTransactionByClientIdController.name,
+      useClass: BuildFindTransactionByClientIdController,
+    },
   ],
 })
 export class TransactionModule {}

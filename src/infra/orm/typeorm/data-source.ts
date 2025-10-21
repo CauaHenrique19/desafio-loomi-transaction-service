@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { User, Transaction } from '@transaction-service/infra/orm/entities';
-import { CONFIG } from 'src/config';
+import { CONFIG } from '@transaction-service/config';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -14,9 +14,12 @@ export const AppDataSource = new DataSource({
   entities: [User, Transaction],
   subscribers: [],
   migrations: [],
-  ssl: CONFIG.NODE_ENV === 'development' ? false : true,
+  ssl:
+    CONFIG.NODE_ENV === 'development' || CONFIG.NODE_ENV === 'test'
+      ? false
+      : true,
   extra:
-    CONFIG.NODE_ENV === 'development'
+    CONFIG.NODE_ENV === 'development' || CONFIG.NODE_ENV === 'test'
       ? {}
       : {
           ssl: {

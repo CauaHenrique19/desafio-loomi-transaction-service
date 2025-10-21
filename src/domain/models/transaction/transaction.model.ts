@@ -2,7 +2,7 @@ export interface TransactionModel {
   id: string;
   senderClientId: string;
   receiverClientId: string;
-  amout: number;
+  amount: number;
   description: string;
   createdAt: Date;
 }

@@ -8,7 +8,7 @@ export class CreateTransactionDTO {
   receiverClientId: string;
 
   @IsNumber()
-  amout: number;
+  amount: number;
 
   @IsString()
   description: string;

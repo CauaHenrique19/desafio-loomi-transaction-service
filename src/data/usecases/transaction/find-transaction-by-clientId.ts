@@ -29,7 +29,7 @@ export class FindTransactionByClientId
       clientId: parameters.clientId,
     });
 
-    if (!user) {
+    if (!user.length) {
       throw new UserNotFoundError();
     }
 

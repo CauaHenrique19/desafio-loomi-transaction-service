@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Param,
   Post,
   Res,
@@ -35,8 +36,11 @@ import { IdempotencyInterceptor } from '@transaction-service/main/interceptors';
 @Controller('transactions')
 export class TransactionController {
   constructor(
+    @Inject(BuildCreateTransactionController.name)
     private readonly buildCreateTransactionController: BuildCreateTransactionController,
+    @Inject(BuildFindTransactionByIdController.name)
     private readonly buildFindTransactionByIdController: BuildFindTransactionByIdController,
+    @Inject(BuildFindTransactionByClientIdController.name)
     private readonly buildFindTransactionByClientIdController: BuildFindTransactionByClientIdController,
   ) {}
 
@@ -52,7 +56,7 @@ export class TransactionController {
       example: {
         senderClientId: 'uuid',
         receiverClientId: 'uuid',
-        amout: 10,
+        amount: 10,
         description: 'transferencia blablabla',
       },
     },
@@ -71,7 +75,7 @@ export class TransactionController {
         id: 'string',
         senderClientId: 'string',
         receiverClientId: 'string',
-        amout: 'number',
+        amount: 'number',
         description: 'string',
         createdAt: 'Date',
       },
@@ -112,7 +116,7 @@ export class TransactionController {
         id: 'string',
         senderClientId: 'string',
         receiverClientId: 'string',
-        amout: 'number',
+        amount: 'number',
         description: 'string',
         deletedAt: 'Date',
       },
@@ -147,7 +151,7 @@ export class TransactionController {
           id: 'string',
           senderClientId: 'string',
           receiverClientId: 'string',
-          amout: 'number',
+          amount: 'number',
           description: 'string',
           deletedAt: 'Date',
         },
