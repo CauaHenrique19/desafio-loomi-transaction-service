@@ -31,7 +31,6 @@ export class CreateUserListener implements Listener {
 export namespace CreateUserListener {
   export type Parameters = {
     id: string;
-    address: string;
     bankAccount: string;
     digit: string;
   };

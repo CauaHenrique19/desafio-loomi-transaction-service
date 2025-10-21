@@ -11,9 +11,18 @@ import { UserController } from './user.controller';
   imports: [FactoryModule],
   controllers: [UserController],
   providers: [
-    BuildCreateUserListener,
-    BuildUpdateUserListener,
-    BuildDeleteUserListener,
+    {
+      provide: BuildCreateUserListener.name,
+      useClass: BuildCreateUserListener,
+    },
+    {
+      provide: BuildUpdateUserListener.name,
+      useClass: BuildUpdateUserListener,
+    },
+    {
+      provide: BuildDeleteUserListener.name,
+      useClass: BuildDeleteUserListener,
+    },
   ],
 })
 export class UserModule {}

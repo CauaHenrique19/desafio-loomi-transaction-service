@@ -14,5 +14,6 @@ export const CONFIG = {
   NODE_ENV: process.env.NODE_ENV?.trim(),
   SERVICE_NAME: process.env.SERVICE_NAME || 'catalog-service',
   KAFKA_BROKER_HOST: process.env.KAFKA_BROKER_HOST || 'localhost:9092',
+  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
   REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
 };

@@ -7,10 +7,13 @@ import {
 import { CONFIG } from '@transaction-service/config';
 
 export class RedisAdapter implements CacheAdapter {
-  private client: Redis;
+  public client: Redis;
 
   constructor() {
-    this.client = new Redis({ port: CONFIG.REDIS_PORT });
+    this.client = new Redis({
+      host: CONFIG.REDIS_HOST,
+      port: CONFIG.REDIS_PORT,
+    });
   }
 
   get(key: string): Promise<string | null> {

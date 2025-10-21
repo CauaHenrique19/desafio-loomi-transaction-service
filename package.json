@@ -14,8 +14,9 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest -c jest-unit-config.js --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
@@ -29,6 +30,7 @@
     "class-validator": "^0.14.2",
     "dotenv": "^17.0.1",
     "ioredis": "^5.8.1",
+    "ioredis-mock": "^8.13.0",
     "kafkajs": "^2.2.4",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",

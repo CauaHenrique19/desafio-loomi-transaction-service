@@ -27,7 +27,7 @@ export class Transaction implements TransactionModel {
     scale: 2,
     transformer: new ColumnNumericTransformer(),
   })
-  amout: number;
+  amount: number;
 
   @Column()
   description: string;

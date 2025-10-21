@@ -1,4 +1,4 @@
-import { Controller, Logger } from '@nestjs/common';
+import { Controller, Inject, Logger } from '@nestjs/common';
 
 import {
   Ctx,
@@ -29,8 +29,11 @@ export class UserController {
   });
 
   constructor(
+    @Inject(BuildCreateUserListener.name)
     private readonly buildCreateUserListener: BuildCreateUserListener,
+    @Inject(BuildUpdateUserListener.name)
     private readonly buildUpdateUserListener: BuildUpdateUserListener,
+    @Inject(BuildDeleteUserListener.name)
     private readonly buildDeleteUserListener: BuildDeleteUserListener,
   ) {}
 
